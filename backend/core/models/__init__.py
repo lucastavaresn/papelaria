@@ -1,8 +1,7 @@
-
 # import all models
+from .comission import Comission
 from .customer import Customer
 from .product import Product
-from .sale_item import SaleItem
 from .sale import Sale
+from .sale_item import SaleItem
 from .seller import Seller
-from .comission import Comission

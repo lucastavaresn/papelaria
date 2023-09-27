@@ -1,5 +1,6 @@
-from rest_framework import generics, viewsets, status
+from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
+
 from core.models.customer import Customer
 from core.models.product import Product
 from core.models.sale import Sale
@@ -16,20 +17,23 @@ class SaleViewSet(viewsets.ModelViewSet):
         return SaleSerializer
 
     def create(self, request):
-  
-        seller_id = request.data['seller']
-        customer_id = request.data['customer']
-        invoice = request.data['invoice']
-        datetime = request.data['datetime']
-        products = request.data['products']
+        seller_id = request.data["seller"]
+        customer_id = request.data["customer"]
+        invoice = request.data["invoice"]
+        datetime = request.data["datetime"]
+        products = request.data["products"]
 
         customer = Customer.objects.get(id=customer_id)
         seller = Seller.objects.get(id=seller_id)
 
-        sale = Sale.objects.create(seller=seller, customer=customer, invoice=invoice, datetime=datetime)
+        sale = Sale.objects.create(
+            seller=seller, customer=customer, invoice=invoice, datetime=datetime
+        )
         for product in products:
             product_object = Product.objects.get(id=product["product"])
-            SaleItem.objects.create(sale=sale, product=product_object, sold_amount=product["quantity"])
+            SaleItem.objects.create(
+                sale=sale, product=product_object, sold_amount=product["quantity"]
+            )
 
         return Response(sale)
 
@@ -37,25 +41,25 @@ class SaleViewSet(viewsets.ModelViewSet):
         sale = self.queryset.all()
         serializer = SaleSerializer(sale, many=True)
         return Response(serializer.data)
-    
+
     def retrieve(self, request, pk):
         sale = self.queryset.get(pk=pk)
         serializer = SaleSerializer(sale)
         return Response(serializer.data)
-    
+
     def update(self, request, pk):
         sale = self.queryset.get(pk=pk)
 
-        sale.vendedor = request.data['seller']
-        sale.cliente = request.data['costumer']
-        sale.invoice = request.data['invoice']
-        sale.datetime = request.data['datetime']
+        sale.vendedor = request.data["seller"]
+        sale.cliente = request.data["costumer"]
+        sale.invoice = request.data["invoice"]
+        sale.datetime = request.data["datetime"]
 
         sale.save()
 
         serializer = SaleSerializer(sale)
         return Response(serializer.data)
-    
+
     def delete(self, request, pk):
         sale = self.queryset.get(pk=pk)
 

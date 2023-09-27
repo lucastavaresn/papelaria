@@ -8,4 +8,5 @@ class ComissionAdmin(admin.ModelAdmin):
     list_display = ("id", "day_of_week", "min_commission", "max_commission")
     search_fields = ("id", "day_of_week")
 
+
 admin.site.register(Comission, ComissionAdmin)

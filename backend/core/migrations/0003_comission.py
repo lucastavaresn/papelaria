@@ -4,23 +4,43 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0002_product_sale_seller_alter_customer_options_saleitem_and_more'),
+        ("core", "0002_product_sale_seller_alter_customer_options_saleitem_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Comission',
+            name="Comission",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('day_of_week', models.CharField(max_length=10, verbose_name='Dia da semana')),
-                ('min_commission', models.DecimalField(decimal_places=2, max_digits=5, verbose_name='Comissão Mínima')),
-                ('max_commission', models.DecimalField(decimal_places=2, max_digits=5, verbose_name='Comissão Máxima')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "day_of_week",
+                    models.CharField(max_length=10, verbose_name="Dia da semana"),
+                ),
+                (
+                    "min_commission",
+                    models.DecimalField(
+                        decimal_places=2, max_digits=5, verbose_name="Comissão Mínima"
+                    ),
+                ),
+                (
+                    "max_commission",
+                    models.DecimalField(
+                        decimal_places=2, max_digits=5, verbose_name="Comissão Máxima"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Comissão',
-                'verbose_name_plural': 'Comissões',
+                "verbose_name": "Comissão",
+                "verbose_name_plural": "Comissões",
             },
         ),
     ]

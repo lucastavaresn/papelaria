@@ -4,8 +4,6 @@ from core.models.sale_item import SaleItem
 
 
 class SaleItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = SaleItem
-        fields = '__all__'
-    
+        fields = "__all__"

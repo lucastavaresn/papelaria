@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Seller(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nome")
     email = models.EmailField(verbose_name="E-mail")

@@ -1,4 +1,1 @@
-from . import customer_admin
-from . import comission_admin
-from . import product_admin
-from . import seller_admin
+from . import comission_admin, customer_admin, product_admin, seller_admin

@@ -6,7 +6,6 @@ from core.serializers.product_serializer import ProductSerializer
 from core.serializers.seller_serializer import SellerSerializer
 
 
-
 class SaleSerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True, read_only=True)
     seller = SellerSerializer(read_only=True)
@@ -14,5 +13,4 @@ class SaleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sale
-        fields = '__all__'
-    
+        fields = "__all__"
