@@ -7,18 +7,18 @@ from core.viewsets.seller_view import (SellerComissionViewSet,
                                        SellerDetailView, SellerListView)
 
 urlpatterns = [
-    path("customer/", CustomerListView.as_view()),
-    path("customer/<int:pk>/", CustomerDetailView.as_view()),
-    path("product/", ProductListView.as_view()),
-    path("product/<int:pk>/", ProductDetailView.as_view()),
-    path("sale/", SaleViewSet.as_view({"post": "create", "get": "list"})),
+    path("customers/", CustomerListView.as_view()),
+    path("customers/<int:pk>/", CustomerDetailView.as_view()),
+    path("products/", ProductListView.as_view()),
+    path("products/<int:pk>/", ProductDetailView.as_view()),
+    path("sales/", SaleViewSet.as_view({"post": "create", "get": "list"})),
     path(
-        "sale/<int:pk>/",
+        "sales/<int:pk>/",
         SaleViewSet.as_view(
-            {"get": "retrivee", "delete": "delete", "update": "update"}
+            {"get": "retrieve", "delete": "delete", "update": "update"}
         ),
     ),
-    path("seller/", SellerListView.as_view()),
-    path("seller/<int:pk>/", SellerDetailView.as_view()),
-    path("seller_comission/", SellerComissionViewSet.as_view({"get": "list"})),
+    path("sellers/", SellerListView.as_view()),
+    path("sellers/<int:pk>/", SellerDetailView.as_view()),
+    path("seller-commissions/", SellerComissionViewSet.as_view({"get": "list"})),
 ]

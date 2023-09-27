@@ -15,11 +15,6 @@ class SaleItem(models.Model):
         verbose_name = "Item da venda"
         verbose_name_plural = "Itens da venda"
 
-    def calculate_commission(self):
-        return (
-            self.product.unit_value * self.product.commission_percentage / 100
-        ) * self.sold_amount
-
     def __str__(self):
         return (
             f"Item de Venda: {self.product.description} ({self.sold_amount} unidades)"

@@ -1,4 +1,4 @@
-from rest_framework import generics, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from core.models.customer import Customer
@@ -34,8 +34,8 @@ class SaleViewSet(viewsets.ModelViewSet):
             SaleItem.objects.create(
                 sale=sale, product=product_object, sold_amount=product["quantity"]
             )
-
-        return Response(sale)
+        sale_serialize = SaleSerializer(sale)
+        return Response(sale_serialize.data)
 
     def list(self, request):
         sale = self.queryset.all()
