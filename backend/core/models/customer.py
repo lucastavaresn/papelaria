@@ -10,4 +10,4 @@ class Customer(models.Model):
         verbose_name = "Cliente"
 
     def __str__(self):
-        return self.nome
+        return self.name

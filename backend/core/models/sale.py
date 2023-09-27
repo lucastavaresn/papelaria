@@ -17,4 +17,4 @@ class Sale(models.Model):
         verbose_name = "Venda"
 
     def __str__(self):
-        return self.numero_nota_fiscal
+        return self.invoice

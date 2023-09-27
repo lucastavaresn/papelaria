@@ -11,4 +11,4 @@ class Product(models.Model):
         verbose_name = "Produto"
 
     def __str__(self):
-        return self.descricao
+        return self.description

@@ -10,4 +10,4 @@ class Seller(models.Model):
         verbose_name_plural = "Vendedores"
 
     def __str__(self):
-        return self.nome
+        return self.name
