@@ -7,6 +7,7 @@ import { CustomerSaleSlice } from "./features/customerSaleSlice";
 import { CustomerSlice } from "./features/customerSlice";
 import { SellerSlice } from "./features/sellerSlice";
 import { CurrentSaleSlice } from "./features/currentSaleSlice";
+import { SaleSlice } from "./features/saleSlice";
 
 export const store=configureStore({
     reducer:{
@@ -16,7 +17,8 @@ export const store=configureStore({
         customerSale: CustomerSaleSlice.reducer,
         customer: CustomerSlice.reducer,
         seller: SellerSlice.reducer,
-        currentSale: CurrentSaleSlice.reducer
+        currentSale: CurrentSaleSlice.reducer,
+        sale: SaleSlice.reducer
     }
 })
 

@@ -8,6 +8,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useAppSelector } from '../../store/store';
+import { moneyFormat } from '../../utils/money';
+import { SaleItem } from '../../store/features/saleSlice';
 
 
 
@@ -16,48 +19,31 @@ function createData(
   customer: string,
   seller: string,
   date: string,
-  cost: number,
-  options: string,
+  items: SaleItem[]
 ) {
   return {
     invoice,
     customer,
     seller,
     date,
-    cost,
-    options,
-    history: [
-      {
-        product: '005 - Mouse Logitech',
-        quantity: 3,
-        unit_price: 25.56,
-        total: 76.68,
-        percent: 5.0,
-        commission: 3.83,
-      },
-      {
-        product: '012 - Caderno 200 Folhas',
-        quantity: 3,
-        unit_price: 25.56,
-        total: 76.68,
-        percent: 5.0,
-        commission: 3.83,
-      },
-      {
-        product: '105 - Manutenção Bicicleta',
-        quantity: 3,
-        unit_price: 25.56,
-        total: 76.68,
-        percent: 5.0,
-        commission: 3.83,
-      },
-    ],
+    items,
   };
 }
 
 function Row(props: { row: ReturnType<typeof createData> }) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+
+  const totalCalc = (items: SaleItem[]) => {
+   const total = items.reduce((accumulator: any, currentItem: any) => {
+      return {
+        qty: accumulator.qty + currentItem.sold_amount,
+        total: accumulator.total + parseFloat(currentItem.product.unit_value),
+      };
+    }, { qty: 0, total: 0 });
+
+    return total.qty * total.total
+  }
 
   return (
     <React.Fragment>
@@ -66,8 +52,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         <TableCell component="th" scope="row">{row.customer}</TableCell>
         <TableCell>{row.seller}</TableCell>
         <TableCell>{row.date}</TableCell>
-        <TableCell>R$ {row.cost}</TableCell>
-        <TableCell>{row.options}</TableCell>
+        <TableCell>{moneyFormat(totalCalc(row.items))} </TableCell>
+        <TableCell>Deletar</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -85,14 +71,14 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.product}>
-                      <TableCell component="th" scope="row">{historyRow.product}</TableCell>
-                      <TableCell align="center">{historyRow.quantity}</TableCell>
-                      <TableCell align="center">R$ {historyRow.unit_price}</TableCell>
-                      <TableCell align="center">R$ {historyRow.total}</TableCell>
-                      <TableCell align="center">{historyRow.percent}%</TableCell>
-                      <TableCell align="center">R$ {historyRow.commission}</TableCell>
+                  {row.items.map((item) => (
+                    <TableRow key={item.product.id}>
+                      <TableCell component="th" scope="row">{item.product.description}</TableCell>
+                      <TableCell align="center">{item.sold_amount}</TableCell>
+                      <TableCell align="center">{moneyFormat(parseFloat(item.product.unit_value))}</TableCell>
+                      <TableCell align="center">{moneyFormat((item.sold_amount * parseFloat(item.product.unit_value)))}</TableCell>
+                      <TableCell align="center">{item.product.commission_percentage}%</TableCell>
+                      <TableCell align="center">{moneyFormat(((item.sold_amount * parseFloat(item.product.unit_value))*parseInt(item.product.commission_percentage))/100)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -105,28 +91,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   );
 }
 
-const rows = [
-  createData('3490232', "1 Jorge Lacerda dos Santos", "Regina Souza", "19/10/2022 - 14:25", 71.10, "Deleter"),
-  createData('563467', "2 Francisco Severino Ferreira", "Cléber Toledo", "19/10/2022 - 11:05", 65.99, "Deleter"),
-  createData('8678768', "3 Vanessa Elza Liz Freitas", "Jacira dos Santos", "19/10/2022 - 09:10", 102.53, "Deleter"),
-  createData('2437645', "4 Rebeca Beatriz Moreira", "Cléber Toledo", "19/10/2022 - 13:45", 253.75, "Deleter"),
-  createData('976566', "5 Gustavo Pietro da Luz", "Regina Souza", "19/10/2022 - 14:25", 22.36, "Deleter"),
-  createData('3490232', "6 Joge Lacerda dos Santos", "Regina Souza", "19/10/2022 - 14:25", 71.10, "Deleter"),
-  createData('563467', "7 Francico Severino Ferreira", "Cléber Toledo", "19/10/2022 - 11:05", 65.99, "Deleter"),
-  createData('8678768', "8 Vanesa Elza Liz Freitas", "Jacira dos Santos", "19/10/2022 - 09:10", 102.53, "Deleter"),
-  createData('2437645', "9 Rebca Beatriz Moreira", "Cléber Toledo", "19/10/2022 - 13:45", 253.75, "Deleter"),
-  createData('976566', "10 Gustvo Pietro da Luz", "Regina Souza", "19/10/2022 - 14:25", 22.36, "Deleter"),
-  createData('976566', "11 Gustavo Pietro da", "Regina Souza", "19/10/2022 - 14:25", 22.36, "Deleter"),
-  createData('976566', "12 Gustavo PietroLuz", "Regina Souza", "19/10/2022 - 14:25", 22.36, "Deleter"),
-  createData('976566', "13 Gustavo Pietro Luz", "Regina Souza", "19/10/2022 - 14:25", 22.36, "Deleter"),
-  createData('976566', "14 Gustavo da Luz", "Regina Souza", "19/10/2022 - 14:25", 22.36, "Deleter"),
-  createData('976566', "15 Gustavo Luz", "Regina Souza", "19/10/2022 - 14:25", 22.36, "Deleter"),
-
-];
-
 
 export default function ListBlock() {
-
+  const sales = useAppSelector((state)=> state.sale.sales);
   return (
     <TableContainer component={Paper} sx={{height: 600}}>
       <Table aria-label="collapsible table" sx={{overflowY: "hidden"}} stickyHeader>
@@ -141,8 +108,8 @@ export default function ListBlock() {
           </TableRow>
         </TableHead>
         <TableBody >
-          {rows.map((row) => (
-            <Row key={row.customer} row={row} />
+          {sales.map((row) => (
+            <Row key={row.id} row={{invoice: row.invoice, customer: row.customer.name, seller: row.seller.name, date: row.datetime, items: row.items}} />
           ))}
         </TableBody>
       </Table>

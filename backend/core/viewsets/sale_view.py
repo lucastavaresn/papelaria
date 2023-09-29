@@ -40,6 +40,7 @@ class SaleViewSet(viewsets.ModelViewSet):
     def list(self, request):
         sale = self.queryset.all()
         serializer = SaleSerializer(sale, many=True)
+        
         return Response(serializer.data)
 
     def retrieve(self, request, pk):

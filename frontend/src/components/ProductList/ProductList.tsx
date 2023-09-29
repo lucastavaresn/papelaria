@@ -6,7 +6,7 @@ import { Props } from "../../utils/ChildProps"
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { moneyFormat } from "../../utils/money";
-import { removeProduct } from "../../store/features/productSaleSlice";
+import { Product, removeProduct } from "../../store/features/productSaleSlice";
 import { addCurrentSale } from "../../store/features/currentSaleSlice";
 
 
@@ -15,10 +15,13 @@ export const ProductList = ()  =>{
     const dispatch = useAppDispatch();
     const productsList = useAppSelector((state)=> state.productSale.productsSale);
     const total = useAppSelector((state)=> state.currentSale.currentSale);
-    const remove = (item:any) => {
-        const totalItem = (item.quantity * item.unit_value)
+
+    const remove = (product:any) => {
+        const newProcuts = productsList
+        let indexToUpdate = newProcuts.find((item) => item.id === product.id);
+        const totalItem = ((indexToUpdate?.quantity ?? 1) * (indexToUpdate?.unit_value ?? 1))
         const newTotal = total - totalItem
-        dispatch(removeProduct(item.id))
+        dispatch(removeProduct(product.id))
         dispatch(addCurrentSale(newTotal))
     }
     

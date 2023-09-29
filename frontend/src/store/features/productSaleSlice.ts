@@ -18,7 +18,7 @@ const initialState: ProductState = {
 }
 
 export const ProductsSaleSlice=createSlice({
-    name: "product",
+    name: "productSale",
     initialState,
     reducers:{
         addProduct:(state, action:PayloadAction<{id: number, description: string, code: string, unit_value: number, quantity: number}>)=>{

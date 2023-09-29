@@ -1,0 +1,12 @@
+.linkMenuBT {
+    color: #12595e;
+    font-weight: bold !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px !important;
+    padding: 15px 8px;
+}
+
+.linkMenuBT:hover{
+    background-color: #12595e;
+    color: #fff;
+}

@@ -17,7 +17,7 @@ const initialState: CustomerState = {
 }
 
 export const CustomerSaleSlice=createSlice({
-    name: "customer",
+    name: "customerSale",
     initialState,
     reducers:{
         addCustomer:(state, action:PayloadAction<{id: number, name: string, email: string, phone: string}>)=>{

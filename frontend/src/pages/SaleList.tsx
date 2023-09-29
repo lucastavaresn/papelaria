@@ -3,12 +3,16 @@ import ListBlock from "../components/ListBlock/ListBlock";
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { useEffect } from "react";
 import { fetchProduct } from "../store/features/productSlice";
+import { fetchSale } from "../store/features/saleSlice";
 
 export default function SaleList(){
-    
+    const dispatch = useAppDispatch();
+    useEffect(()=>{
+        dispatch(fetchSale());
+    }, [])
     return (
         <>
             <Grid container spacing={2} padding={4} alignContent={'flex-end'} direction={"row"}>

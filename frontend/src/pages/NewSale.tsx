@@ -8,6 +8,10 @@ import { moneyFormat } from "../utils/money";
 import { fetchSeller } from "../store/features/sellerSlice";
 import { fetchCustomer } from "../store/features/customerSlice";
 import { addCurrentSale } from "../store/features/currentSaleSlice";
+import { v4 as uuidv4 } from 'uuid';
+import { Sale , addSaleSend } from "../store/features/saleSenderSlice";
+import DocumentTitle from 'react-document-title';
+
 
 
 export default function SaleCreate(){
@@ -30,7 +34,6 @@ export default function SaleCreate(){
     const [currentQuantity, setCurrentQuantity] = useState(0);
     const [currentCustomer, setCurrentCustomer] = useState<{id: number, name: string, email: string, phone: string}>();
     const [currentSeller, setCurrentSeller] = useState<{id: number, name: string, email: string, phone: string}>();
-    const [currentTotal, setCurrentTotal] = useState<number>(0.00)
 
     const handleSelectSeller = (event: SyntheticEvent<Element, Event>, value: any) => {
         console.log("Selected seller====: ", value)
@@ -82,11 +85,8 @@ export default function SaleCreate(){
                 dispatch(addProduct(saleProduct))
               }
 
-            
-
             dispatch(addCurrentSale(newtotal))
         }
-        
         
             
         }
@@ -118,8 +118,34 @@ export default function SaleCreate(){
     return option.id === value.id;
     };
 
+    const finalize_sale = ()=>{
+        const invoice = uuidv4(); 
+        const actualDate = currentDateTime
+        const custumer = currentCustomer
+        const seller = currentSeller
+        const products = productsSaleList.map((item) => ({
+            product: item.id,
+            quantity: item.quantity,
+          }));
+
+        const sale: Sale = {
+            invoice: invoice,
+            datetime: actualDate.toISOString(),
+            customer: currentCustomer?.id ?? 0,
+            seller: currentSeller?.id ?? 0,
+            products: products
+
+
+        }
+        console.log("Venda concluida ================: ", sale)
+        dispatch(addSaleSend(sale))
+    }
+
     return (
         <>
+            <>
+            <Helmet></Helmet>
+            </>
             <Grid container spacing={2} height={"80vh"}>
                 <Grid item xs={8}>
                     <Grid container direction={"column"} justifyContent="space-around" spacing={3}>
@@ -208,7 +234,7 @@ export default function SaleCreate(){
                             <Grid item xs={12} sx={{paddingX: 4, justifyContent: "space-around", direction: "row"}}>
                                 <Grid container justifyContent={"space-between"} direction={"row"}  >
                                     <Grid item><Button variant="contained" color="secondary" sx={{width: "110px", height: "44px"}}>Cancelar</Button></Grid>
-                                    <Grid item><Button variant="contained" color="secondary" sx={{width: "110px", height: "44px"}}>Finalizar</Button></Grid>
+                                    <Grid item><Button onClick={()=> finalize_sale() } variant="contained" color="secondary" sx={{width: "110px", height: "44px"}}>Finalizar</Button></Grid>
                                 </Grid>
                             </Grid> 
                         </Grid>

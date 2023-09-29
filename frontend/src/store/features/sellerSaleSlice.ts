@@ -17,7 +17,7 @@ const initialState: SellerState = {
 }
 
 export const SellerSaleSlice=createSlice({
-    name: "seller",
+    name: "sellerSale",
     initialState,
     reducers:{
         addSeller:(state, action:PayloadAction<{id: number, name: string, email: string, phone: string}>)=>{
