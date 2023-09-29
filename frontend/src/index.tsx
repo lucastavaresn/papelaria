@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import SaleList from './pages/SaleList';
 import NewSale from './pages/NewSale';
+import SellerCommssion from './pages/SellerCommission';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/sale",
         element: <NewSale/>,
+      },
+      {
+        path: "/commissions",
+        element: <SellerCommssion/>,
       },
     ]
   },

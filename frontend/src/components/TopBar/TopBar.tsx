@@ -64,7 +64,7 @@ export const TopBar = ({title, ... props}: Props) => {
               </Link>
             </ListItem>
             <ListItem >
-              <Link to={"/sale"}>
+              <Link to={"/commissions"}>
                 <ListItemIcon>
                     <CalculateIcon fontSize="small" />
                 </ListItemIcon>

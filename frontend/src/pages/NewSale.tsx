@@ -70,8 +70,19 @@ export default function SaleCreate(){
     const remove_item = (remove_item:any)=>{
         const newSale = [...currentSelectedProducts]
         const novoArray = newSale.filter((item) => item !== remove_item);
+        const newSalees = {...currentSale}
+        newSalees.listProducts = novoArray
+        setSale(newSalees);
         setSelectedProducts(novoArray)
     }
+
+    const handleRemove = (remove: any) => {
+        const novoArray = currentSelectedProducts.filter((item:any) => item.label !== remove.label);
+        const newSalees = {...currentSale}
+        newSalees.listProducts = novoArray
+        setSale(newSalees);
+        setSelectedProducts(novoArray)
+    };
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -128,7 +139,7 @@ export default function SaleCreate(){
 
                     <Grid container>
                         <Grid item xs={12} sx={{paddingRight: "70px"}}>
-                            <ProductList sale={currentSale} setSale={setSale} />
+                            <ProductList sale={currentSale} setSale={setSale} removeItem={handleRemove}/>
                         </Grid>
                     </Grid>
                 </Grid>

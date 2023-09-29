@@ -6,7 +6,7 @@ import { Props } from "../../utils/ChildProps"
 import { useState } from "react";
 
 
-export const ProductList = ({sale, setSale, ...props}: Props)  =>{
+export const ProductList = ({sale, setSale,removeItem, ...props}: Props)  =>{
 
     let products = sale.listProducts
 
@@ -18,6 +18,12 @@ export const ProductList = ({sale, setSale, ...props}: Props)  =>{
             setProduct([...currentProuct, value]);
         }
       };
+    
+    const remove = (item:any) => {
+        console.log("Removendo==============: ", item)
+        removeItem(item)
+    }
+    
     
     return(
         <TableContainer component={Paper} sx={{marginTop: "40px", maxHeight: "60vh"}}>
@@ -34,7 +40,7 @@ export const ProductList = ({sale, setSale, ...props}: Props)  =>{
                 <TableBody>
                 {products.map((product: any) => (
                     <TableRow
-                    key={product.label}
+                    key={(product.label + Math.random())}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     hover
                     >
@@ -42,7 +48,7 @@ export const ProductList = ({sale, setSale, ...props}: Props)  =>{
                     <TableCell align="center">{product.quantity}</TableCell>
                     <TableCell align="center">R$ {product.price}</TableCell>
                     <TableCell align="center">R$ {(product.quantity * product.price)}</TableCell>
-                    <TableCell align="center"><IconButton><DeleteIcon sx={{color: "#BE0000"}}/></IconButton> </TableCell>
+                    <TableCell align="center"><IconButton onClick={()=> remove(product)}><DeleteIcon sx={{color: "#BE0000"}}/></IconButton> </TableCell>
                     </TableRow>
                 ))}
                 </TableBody>

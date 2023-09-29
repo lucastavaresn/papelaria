@@ -1,0 +1,18 @@
+/* datePickerInput: {
+    '& .MuiInputBase-root.Mui-focused': {
+      backgroundColor: '#2b7d83', 
+      color: '#fff',
+    },
+    '& .MuiIconButton-root': {
+      color: '#2b7d83', // Cor do ícone do calendário
+    },
+    '& .MuiPickersDay-daySelected': {
+      backgroundColor: '#2b7d83', // Cor de fundo da data selecionada
+      color: '#fff', // Cor do texto da data selecionada
+    },
+  }, */
+
+ .Mui-selected {
+    background-color: #2b7d83 !important;
+    color: #fff !important;
+}
