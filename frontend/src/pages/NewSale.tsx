@@ -1,88 +1,96 @@
 import {Autocomplete, Button, Grid, TextField, Typography } from "@mui/material";
 import { ChangeEvent, ChangeEventHandler, SyntheticEvent, useEffect, useState } from "react";
 import { ProductList } from "../components/ProductList/ProductList";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { fetchProduct } from "../store/features/productSlice";
+import { addProduct, updateProduct } from "../store/features/productSaleSlice";
+import { moneyFormat } from "../utils/money";
+import { fetchSeller } from "../store/features/sellerSlice";
+import { fetchCustomer } from "../store/features/customerSlice";
+import { addCurrentSale } from "../store/features/currentSaleSlice";
 
 
 export default function SaleCreate(){
+    const dispatch = useAppDispatch();
+    const productsList = useAppSelector((state)=> state.product.products);
+    const productsSaleList = useAppSelector((state)=> state.productSale.productsSale);
+    const customers = useAppSelector((state)=> state.customer.customers)
+    const sellers = useAppSelector((state)=> state.seller.sellers)
+    const total = useAppSelector((state)=> state.currentSale.currentSale);
+    useEffect(()=>{
+        dispatch(fetchProduct());
+        dispatch(fetchSeller());
+        dispatch(fetchCustomer());
+    }, [])
+
+    
 
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
-    const [currentPrice, setPrice] = useState(0.00);
-    const [currentSelectedProducts,setSelectedProducts] = useState<{label: string, quantity: number, price: number}[]>([])
-    const [currentSale, setSale] = useState({
-        listProducts: currentSelectedProducts,
-        customer: "",
-        seller: "",
-        totalPrice: 0
-    });
+    const [currentProduct, setCurrentProduct] = useState<{id: number, description: string, code: string, unit_value: string, quantity: number}>();
+    const [currentQuantity, setCurrentQuantity] = useState(0);
+    const [currentCustomer, setCurrentCustomer] = useState<{id: number, name: string, email: string, phone: string}>();
+    const [currentSeller, setCurrentSeller] = useState<{id: number, name: string, email: string, phone: string}>();
+    const [currentTotal, setCurrentTotal] = useState<number>(0.00)
 
-    const [currentProduct, setCurrentProduct] = useState({
-        label: "" ,
-        quantity: 0,
-        price: 0.00
-    });
+    const handleSelectSeller = (event: SyntheticEvent<Element, Event>, value: any) => {
+        console.log("Selected seller====: ", value)
+        if (value != null){
+            setCurrentSeller(value)
+        }
+        
+      };
+    
+    const handleSelectCustomer = (event: SyntheticEvent<Element, Event>, value: any) => {
+    console.log("Selected customer====: ", value)
+    if (value != null){
+        setCurrentCustomer(value)
+    }
+    
+    };
 
     const handleSelect = (event: SyntheticEvent<Element, Event>, value: any) => {
-        if (value) {
-            const newProduct = {...currentProduct}
-            newProduct.label = value.label
-            newProduct.price = value.price
-           setCurrentProduct(newProduct);
-           console.log("Produto=====: ", currentProduct)
+        console.log("Selected ====: ", value)
+        if (value != null){
+            setCurrentProduct(value)
         }
+        
       };
     
     const handleSelectQuantity = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(event.target.value);
-    if (newValue) {
-        const newProduct = {...currentProduct}
-        newProduct.quantity = newValue
-        setCurrentProduct(newProduct);
-        console.log("Produto=====: ", currentProduct)
-    }
+        const value = parseInt(event.target.value)
+        setCurrentQuantity(value)
     };
-    
+
     const add_item = () => {
-        if (currentProduct.quantity != 0 && currentProduct.label != null){
+        if (currentProduct != null && currentQuantity != 0){
 
-            const prod = {...currentProduct}
-            const newSelectedProd = [...currentSelectedProducts]
-            newSelectedProd.push(prod)
-            const newSale = {...currentSale}
-            newSale.listProducts = newSelectedProd
-            
-            let total = 0;
+           let saleProduct = {
+                id: currentProduct.id,
+                code: currentProduct.code,
+                description: currentProduct.description,
+                unit_value: parseFloat(currentProduct.unit_value,),
+                quantity: currentQuantity
 
-            for (const item of newSelectedProd) {
-                total += (item.price * item.quantity);
             }
-            
-            newSale.totalPrice = total
+            let newtotal = total + (currentQuantity * parseFloat(currentProduct.unit_value,))
+            const itemToUpdate = productsSaleList.find((item) => item.id === currentProduct.id);
+            if (itemToUpdate) {
+                saleProduct.quantity = itemToUpdate.quantity + currentQuantity;
+                dispatch(updateProduct(saleProduct))
+                newtotal = total + (saleProduct.quantity * parseFloat(currentProduct.unit_value,))
+              }else{
+                dispatch(addProduct(saleProduct))
+              }
 
-           setSale(newSale);
-            setSelectedProducts(newSelectedProd)
-           console.log("Atual======: ", currentSale)
-           console.log("total======: ", currentSelectedProducts)
-           
+            
+
+            dispatch(addCurrentSale(newtotal))
+        }
+        
+        
             
         }
-    }
 
-    const remove_item = (remove_item:any)=>{
-        const newSale = [...currentSelectedProducts]
-        const novoArray = newSale.filter((item) => item !== remove_item);
-        const newSalees = {...currentSale}
-        newSalees.listProducts = novoArray
-        setSale(newSalees);
-        setSelectedProducts(novoArray)
-    }
-
-    const handleRemove = (remove: any) => {
-        const novoArray = currentSelectedProducts.filter((item:any) => item.label !== remove.label);
-        const newSalees = {...currentSale}
-        newSalees.listProducts = novoArray
-        setSale(newSalees);
-        setSelectedProducts(novoArray)
-    };
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -104,6 +112,11 @@ export default function SaleCreate(){
         };
         return currentDateTime.toLocaleDateString('pt-BR', options);
       };
+    
+    const isOptionEqualToValue = (option:any, value:any) => {
+    // Compare as opções com base no campo 'id'
+    return option.id === value.id;
+    };
 
     return (
         <>
@@ -121,9 +134,11 @@ export default function SaleCreate(){
                         <>Buscar pelo código de barras ou descrição</>
                         <Autocomplete
                                 disablePortal
-                                onChange={handleSelect}
                                 id="products"
-                                options={products}
+                                onChange={handleSelect}
+                                getOptionLabel={(option) => option.description}
+                                isOptionEqualToValue={isOptionEqualToValue}
+                                options={productsList}
                                 sx={{ width: "100%" }}
                                 renderInput={(params) => <TextField {...params} placeholder="Digite o código ou nome do produto"/>}
                             />
@@ -139,7 +154,7 @@ export default function SaleCreate(){
 
                     <Grid container>
                         <Grid item xs={12} sx={{paddingRight: "70px"}}>
-                            <ProductList sale={currentSale} setSale={setSale} removeItem={handleRemove}/>
+                            <ProductList/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -162,6 +177,9 @@ export default function SaleCreate(){
                             <Autocomplete
                                 disablePortal
                                 id="seller"
+                                onChange={handleSelectSeller}
+                                getOptionLabel={(option) => option.name}
+                                isOptionEqualToValue={isOptionEqualToValue}
                                 options={customers}
                                 sx={{ width: "90%" }}
                                 renderInput={(params) => <TextField {...params} placeholder="Selecione o nome"/>}
@@ -172,6 +190,9 @@ export default function SaleCreate(){
                             <Autocomplete
                                 disablePortal
                                 id="customer"
+                                onChange={handleSelectCustomer}
+                                getOptionLabel={(option) => option.name}
+                                isOptionEqualToValue={isOptionEqualToValue}
                                 options={sellers}
                                 sx={{ width: "90%" }}
                                 renderInput={(params) => <TextField {...params} placeholder="Selecione o nome"/>}
@@ -181,7 +202,7 @@ export default function SaleCreate(){
                             <Grid item xs={12} sx={{paddingX: 4, justifyContent: "space-around", direction: "row", marginTop: "70px", fontWeight: "bold"}}>
                                 <Grid container justifyContent={"space-between"} direction={"row"} paddingBottom={8}>
                                     <Grid item justifyContent={"left"} sx={{fontSize: "16px"}}>Valor total da venda:</Grid>
-                                    <Grid item sx={{fontSize: "23px"}}>R$ {currentSale.totalPrice}</Grid>
+                                    <Grid item sx={{fontSize: "23px"}}>{moneyFormat(total)}</Grid>
                                 </Grid>
                             </Grid> 
                             <Grid item xs={12} sx={{paddingX: 4, justifyContent: "space-around", direction: "row"}}>
@@ -198,20 +219,3 @@ export default function SaleCreate(){
         </>
     );
 }
-
-
-const customers = [
-    { label: '001 - Regina Souza', year: 1994 },
-    { label: '002 - Matheus Oliveira', year: 1972 },
-]
-
-const sellers = [
-    { label: '001 - Caio Dantas', year: 1994 },
-    { label: '002 - Henrique Pirez', year: 1972 },
-]
-
-const products = [ 
-    { label: '001 - Mouse Logitech', price: 230.56 },
-    { label: '002 - Iphone 14 pro 128gb', price: 6560.76 },
-    { label: '003 - Ipad pro 256gb', price: 8453.32 },
-]

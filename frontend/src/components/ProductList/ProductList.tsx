@@ -4,24 +4,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Props } from "../../utils/ChildProps"
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { moneyFormat } from "../../utils/money";
+import { removeProduct } from "../../store/features/productSaleSlice";
+import { addCurrentSale } from "../../store/features/currentSaleSlice";
 
 
-export const ProductList = ({sale, setSale,removeItem, ...props}: Props)  =>{
+export const ProductList = ()  =>{
 
-    let products = sale.listProducts
-
-    const [currentProuct, setProduct] = useState<string[]>([]);
-
-    const handleSelect = (event: any, value: string | null) => {
-        if (value) {
-            console.log("Aeeeeeeeee==========: ", value)
-            setProduct([...currentProuct, value]);
-        }
-      };
-    
+    const dispatch = useAppDispatch();
+    const productsList = useAppSelector((state)=> state.productSale.productsSale);
+    const total = useAppSelector((state)=> state.currentSale.currentSale);
     const remove = (item:any) => {
-        console.log("Removendo==============: ", item)
-        removeItem(item)
+        const totalItem = (item.quantity * item.unit_value)
+        const newTotal = total - totalItem
+        dispatch(removeProduct(item.id))
+        dispatch(addCurrentSale(newTotal))
     }
     
     
@@ -38,17 +36,17 @@ export const ProductList = ({sale, setSale,removeItem, ...props}: Props)  =>{
                 </TableRow>
                 </TableHead>
                 <TableBody>
-                {products.map((product: any) => (
+                {productsList.map((product: any) => (
                     <TableRow
-                    key={(product.label + Math.random())}
+                    key={(product.id + Math.random())}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     hover
                     >
-                    <TableCell component="th" scope="row">{product.label}</TableCell>
+                    <TableCell component="th" scope="row">{product.description}</TableCell>
                     <TableCell align="center">{product.quantity}</TableCell>
-                    <TableCell align="center">R$ {product.price}</TableCell>
-                    <TableCell align="center">R$ {(product.quantity * product.price)}</TableCell>
-                    <TableCell align="center"><IconButton onClick={()=> remove(product)}><DeleteIcon sx={{color: "#BE0000"}}/></IconButton> </TableCell>
+                    <TableCell align="center">{moneyFormat(product.unit_value)}</TableCell>
+                    <TableCell align="center">{moneyFormat(product.quantity * product.unit_value)}</TableCell>
+                    <TableCell align="center"><IconButton onClick={()=>remove(product)}><DeleteIcon sx={{color: "#BE0000"}}/></IconButton> </TableCell>
                     </TableRow>
                 ))}
                 </TableBody>
