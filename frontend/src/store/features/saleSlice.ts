@@ -29,7 +29,7 @@ const initialState: SaleState = {
 }
 
 export const fetchSale = createAsyncThunk("sale/fetch", async (thunkAPI)=>{
-    const response=await fetch(`${apiBaseUrl}/sales`, {
+    const response=await fetch(`${apiBaseUrl}/sales/`, {
         method: "GET"
     });
     const data=response.json();

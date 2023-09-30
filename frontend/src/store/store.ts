@@ -8,6 +8,7 @@ import { CustomerSlice } from "./features/customerSlice";
 import { SellerSlice } from "./features/sellerSlice";
 import { CurrentSaleSlice } from "./features/currentSaleSlice";
 import { SaleSlice } from "./features/saleSlice";
+import { CommissionSlice } from "./features/commissionSlice";
 
 export const store=configureStore({
     reducer:{
@@ -18,7 +19,9 @@ export const store=configureStore({
         customer: CustomerSlice.reducer,
         seller: SellerSlice.reducer,
         currentSale: CurrentSaleSlice.reducer,
-        sale: SaleSlice.reducer
+        sale: SaleSlice.reducer,
+        commission: CommissionSlice.reducer
+
     }
 })
 

@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Props } from "../../utils/ChildProps"
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { moneyFormat } from "../../utils/money";
+import { moneyFormat } from "../../utils/formatter";
 import { Product, removeProduct } from "../../store/features/productSaleSlice";
 import { addCurrentSale } from "../../store/features/currentSaleSlice";
 

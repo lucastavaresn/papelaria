@@ -9,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useAppSelector } from '../../store/store';
-import { moneyFormat } from '../../utils/money';
+import { moneyFormat } from '../../utils/formatter';
 import { SaleItem } from '../../store/features/saleSlice';
 
 

@@ -12,18 +12,43 @@ import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import SearchIcon from '@mui/icons-material/Search';
+import { useAppDispatch } from "../../store/store";
+import { dateFormat } from "../../utils/formatter";
+import { fetchCommission } from "../../store/features/commissionSlice";
 
 export const DataPickerComp = ()=> {
 
+  const [currentStartDate, setCurrentStartDate] = useState();
+    const [currentEndDate, setCurrentEndDate] = useState();
+    const dispatch = useAppDispatch();
+
+    const updateTable = () => {
+      const start = dayjs(currentStartDate).toDate()
+      const end = dayjs(currentEndDate).toDate()
+      
+      const dates = {
+        start: dateFormat(start),
+        end: dateFormat(end)
+      }
+      console.log("Enviando data ==============: ", dates)
+      dispatch(fetchCommission(dates))
+      
+    }
+
+    const setStart = (data:any) => {
+      setCurrentStartDate(data)
+  }
+    const setEnd = (data:any) => {
+      setCurrentEndDate(data)
+  }
+
     return  (
         <>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ptBR">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker', 'DatePicker']}>
-        <DatePicker 
-        defaultValue={dayjs()}/>
-        <DatePicker 
-        defaultValue={dayjs()}/>
-        <Button variant="contained" color="secondary"><SearchIcon sx={{color: "#fff"}}/></Button>
+        <DatePicker defaultValue={dayjs()}  onChange={(newValue:any) => setStart(newValue)}/>
+        <DatePicker defaultValue={dayjs()} onChange={(newValue:any) => setEnd(newValue)}/>
+        <Button variant="contained" onClick={()=> updateTable()} color="secondary"><SearchIcon sx={{color: "#fff"}}/></Button>
       </DemoContainer>
       
     </LocalizationProvider>

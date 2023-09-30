@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { fetchProduct } from "../store/features/productSlice";
 import { fetchSale } from "../store/features/saleSlice";
 
+
+
 export default function SaleList(){
     const dispatch = useAppDispatch();
     useEffect(()=>{

@@ -9,12 +9,13 @@ import { Drawer, Grid, List, ListItem, ListItemIcon, ListItemText } from '@mui/m
 import LogoImage from '../../assets/images/logoipsum.svg';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import CalculateIcon from '@mui/icons-material/Calculate';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Props } from '../../utils/ChildProps';
 import './TopBar.css';
+import { pageTitle } from '../../utils/PageName';
 
 export const TopBar = ({title, ... props}: Props) => {
-  
+    const location = useLocation();
     const [openSidebar, setOpenSidebar] = useState(false);
 
     const toggleSidebar = () => {
@@ -35,11 +36,11 @@ export const TopBar = ({title, ... props}: Props) => {
                 >
                   <MenuIcon sx={{fontSize: "40px", marginTop: "-40px"}} />
                 </IconButton>
-                <img src={LogoImage} alt="Logo" className='logo' />
+                <><img src={LogoImage} alt="Logo" className='logo' /></>
               </Grid>
               <Grid item xs={9}>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, alignContent: 'center' }}>
-                  {document.title}
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, alignContent: 'center' }} className="PageTitle">
+                  {pageTitle(location)}
                 </Typography>
               </Grid>
             </Grid>

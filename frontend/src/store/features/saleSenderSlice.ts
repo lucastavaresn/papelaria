@@ -26,8 +26,9 @@ const initialState: SaleSendState = {
     sales: []
 }
 
-export const fetchSaleSend = createAsyncThunk("sale/fetch", async (sale: Sale ,thunkAPI)=>{
-    const response=await fetch(`${apiBaseUrl}/sales`, {
+export const fetchSaleSend = createAsyncThunk("sale/fetch", async (sale: any ,thunkAPI)=>{
+    console.log("Antes de enviar : ", sale)
+    const response=await fetch(`${apiBaseUrl}/sales/`, {
         method: "POST",
         headers:{
             "Content-Type": "application/json"
@@ -49,7 +50,7 @@ export const SaleSendSlice=createSlice({
     },
     extraReducers:(builder)=> {
         builder.addCase(fetchSaleSend.fulfilled,(state, action)=>{
-            state.sales=action.payload;
+            state.sales.push(action.payload);
         })
     },
 })

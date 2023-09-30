@@ -4,13 +4,13 @@ import { ProductList } from "../components/ProductList/ProductList";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { fetchProduct } from "../store/features/productSlice";
 import { addProduct, updateProduct } from "../store/features/productSaleSlice";
-import { moneyFormat } from "../utils/money";
+import { dateFormat, moneyFormat } from "../utils/formatter";
 import { fetchSeller } from "../store/features/sellerSlice";
 import { fetchCustomer } from "../store/features/customerSlice";
 import { addCurrentSale } from "../store/features/currentSaleSlice";
 import { v4 as uuidv4 } from 'uuid';
-import { Sale , addSaleSend } from "../store/features/saleSenderSlice";
-import DocumentTitle from 'react-document-title';
+import { Sale , addSaleSend, fetchSaleSend } from "../store/features/saleSenderSlice";
+
 
 
 
@@ -36,7 +36,6 @@ export default function SaleCreate(){
     const [currentSeller, setCurrentSeller] = useState<{id: number, name: string, email: string, phone: string}>();
 
     const handleSelectSeller = (event: SyntheticEvent<Element, Event>, value: any) => {
-        console.log("Selected seller====: ", value)
         if (value != null){
             setCurrentSeller(value)
         }
@@ -44,7 +43,7 @@ export default function SaleCreate(){
       };
     
     const handleSelectCustomer = (event: SyntheticEvent<Element, Event>, value: any) => {
-    console.log("Selected customer====: ", value)
+        console.log("Customer: ", value)
     if (value != null){
         setCurrentCustomer(value)
     }
@@ -52,7 +51,6 @@ export default function SaleCreate(){
     };
 
     const handleSelect = (event: SyntheticEvent<Element, Event>, value: any) => {
-        console.log("Selected ====: ", value)
         if (value != null){
             setCurrentProduct(value)
         }
@@ -121,16 +119,14 @@ export default function SaleCreate(){
     const finalize_sale = ()=>{
         const invoice = uuidv4(); 
         const actualDate = currentDateTime
-        const custumer = currentCustomer
-        const seller = currentSeller
         const products = productsSaleList.map((item) => ({
             product: item.id,
             quantity: item.quantity,
           }));
 
-        const sale: Sale = {
+        const sale = {
             invoice: invoice,
-            datetime: actualDate.toISOString(),
+            datetime: dateFormat(actualDate),
             customer: currentCustomer?.id ?? 0,
             seller: currentSeller?.id ?? 0,
             products: products
@@ -138,14 +134,12 @@ export default function SaleCreate(){
 
         }
         console.log("Venda concluida ================: ", sale)
-        dispatch(addSaleSend(sale))
+        dispatch(fetchSaleSend(sale))
+
     }
 
     return (
         <>
-            <>
-            <Helmet></Helmet>
-            </>
             <Grid container spacing={2} height={"80vh"}>
                 <Grid item xs={8}>
                     <Grid container direction={"column"} justifyContent="space-around" spacing={3}>
@@ -206,7 +200,7 @@ export default function SaleCreate(){
                                 onChange={handleSelectSeller}
                                 getOptionLabel={(option) => option.name}
                                 isOptionEqualToValue={isOptionEqualToValue}
-                                options={customers}
+                                options={sellers}
                                 sx={{ width: "90%" }}
                                 renderInput={(params) => <TextField {...params} placeholder="Selecione o nome"/>}
                             />
@@ -219,7 +213,7 @@ export default function SaleCreate(){
                                 onChange={handleSelectCustomer}
                                 getOptionLabel={(option) => option.name}
                                 isOptionEqualToValue={isOptionEqualToValue}
-                                options={sellers}
+                                options={customers}
                                 sx={{ width: "90%" }}
                                 renderInput={(params) => <TextField {...params} placeholder="Selecione o nome"/>}
                             />

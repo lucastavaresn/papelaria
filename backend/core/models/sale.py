@@ -7,7 +7,7 @@ from core.models.seller import Seller
 
 class Sale(models.Model):
     invoice = models.CharField(
-        max_length=20, unique=True, verbose_name="Número nota fiscal"
+        max_length=122, unique=True, verbose_name="Número nota fiscal"
     )
     datetime = models.DateTimeField(verbose_name="Data e hora")
     customer = models.ForeignKey(
