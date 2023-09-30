@@ -8,13 +8,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useAppSelector } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { moneyFormat } from '../../utils/formatter';
-import { SaleItem } from '../../store/features/saleSlice';
-
+import { SaleItem, fetchRemoveSale, removeSale } from '../../store/features/saleSlice';
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Grid, IconButton } from '@mui/material';
+import DialogAlert from '../DialogAlert/DialogAlert';
 
 
 function createData(
+  id: number,
   invoice: string,
   customer: string,
   seller: string,
@@ -22,6 +26,7 @@ function createData(
   items: SaleItem[]
 ) {
   return {
+    id,
     invoice,
     customer,
     seller,
@@ -30,10 +35,10 @@ function createData(
   };
 }
 
-function Row(props: { row: ReturnType<typeof createData> }) {
+function Row(props: { row: ReturnType<typeof createData> , status: React.Dispatch<React.SetStateAction<boolean>>, itemId: any}) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
-
+  const dispatch = useAppDispatch()
   const totalCalc = (items: SaleItem[]) => {
    const total = items.reduce((accumulator: any, currentItem: any) => {
       return {
@@ -45,15 +50,39 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     return total.qty * total.total
   }
 
+  const deleteSale = (id:number) => {
+    dispatch(fetchRemoveSale(id))
+    dispatch(removeSale(id))
+
+  }
+
   return (
     <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset', cursor: 'pointer'  } }} onClick={() => setOpen(!open)} hover >
+      <TableRow sx={{ '& > *': { borderBottom: 'unset', cursor: 'pointer'  } }} hover >
         <TableCell >{row.invoice}</TableCell>
         <TableCell component="th" scope="row">{row.customer}</TableCell>
         <TableCell>{row.seller}</TableCell>
         <TableCell>{row.date}</TableCell>
         <TableCell>{moneyFormat(totalCalc(row.items))} </TableCell>
-        <TableCell>Deletar</TableCell>
+        <TableCell>
+        <Grid container>
+          <Grid item xs={6} onClick={() => setOpen(!open)} sx={{color: "#12595e", fontWeight: "bold", paddingTop:"10px", fontSize:"16px"}}>
+            Ver Itens
+          </Grid>
+          <Grid item xs={3}>
+            <IconButton>
+              <CreateIcon sx={{color: "#12595e"}}/>
+            </IconButton>
+          </Grid>
+          <Grid item xs={3}>
+          <IconButton onClick={()=> deleteSale(row.id)}>
+              <DeleteIcon sx={{color: "#BE0000"}}/>
+              
+            </IconButton>
+          </Grid>
+        </Grid>
+
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -94,6 +123,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
 export default function ListBlock() {
   const sales = useAppSelector((state)=> state.sale.sales);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [itemId, setItemId] = React.useState(0);
   return (
     <TableContainer component={Paper} sx={{height: 600}}>
       <Table aria-label="collapsible table" sx={{overflowY: "hidden"}} stickyHeader>
@@ -104,12 +135,13 @@ export default function ListBlock() {
             <TableCell variant="head">Vendedor</TableCell>
             <TableCell variant="head">Data da Venda</TableCell>
             <TableCell variant="head">Valor Total</TableCell>
-            <TableCell variant="head">Opções</TableCell>
+            <TableCell variant="head" align="center">Opções</TableCell>
           </TableRow>
         </TableHead>
         <TableBody >
+        <DialogAlert item={itemId} isOpen={openModal}/>
           {sales.map((row) => (
-            <Row key={row.id} row={{invoice: row.invoice, customer: row.customer.name, seller: row.seller.name, date: row.datetime, items: row.items}} />
+            <Row key={row.id} status={setOpenModal} itemId={setItemId} row={{id: row.id,invoice: row.invoice, customer: row.customer.name, seller: row.seller.name, date: row.datetime, items: row.items}} />
           ))}
         </TableBody>
       </Table>

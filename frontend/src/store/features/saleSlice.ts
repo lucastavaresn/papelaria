@@ -3,6 +3,7 @@ import { apiBaseUrl } from "../settings";
 import { Product } from "./productSlice";
 import { Seller } from "./sellerSlice";
 import { Customer } from "./customerSlice";
+import { useAppDispatch } from "../store";
 
 export interface SaleItem {
     id: number;
@@ -33,6 +34,15 @@ export const fetchSale = createAsyncThunk("sale/fetch", async (thunkAPI)=>{
         method: "GET"
     });
     const data=response.json();
+    return data;
+})
+
+export const fetchRemoveSale = createAsyncThunk("sale/fetch", async (id: number ,{dispatch})=>{
+    const response=await fetch(`${apiBaseUrl}/sales/${id}`, {
+        method: "DELETE"
+    });
+    const data=await response.json();
+    dispatch(removeSale(id))
     return data;
 })
 

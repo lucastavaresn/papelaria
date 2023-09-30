@@ -7,11 +7,18 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Props } from '../../utils/ChildProps';
 import { Snackbar } from '@mui/material';
+import { useAppDispatch } from '../../store/store';
+import { removeSale } from '../../store/features/saleSlice';
 
-export default function DialogAlert({title, ... props}: Props) {
-  const [open, setOpen] = React.useState(true);
+interface ConfirmationModalProps {
+  isOpen: boolean;
+  item: number;
+}
+
+export default function DialogAlert({ isOpen, item }: ConfirmationModalProps) {
+  const [open, setOpen] = React.useState(isOpen);
   const [openAlert, setOpenAlert] = React.useState(false);
-
+  const dispatch = useAppDispatch()
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -23,6 +30,8 @@ export default function DialogAlert({title, ... props}: Props) {
   const handleCloseConfirm = () => {
     setOpen(false);
     setOpenAlert(true)
+    dispatch(removeSale(item))
+
   };
 
   return (
@@ -52,10 +61,14 @@ export default function DialogAlert({title, ... props}: Props) {
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: "right" }}
         open={openAlert}
-        message="I love snacks"
+        message="VENDA REMOVIDA COM SUCESSO"
         key={"topright"}
         />
       </>
     </div>
   );
+}
+
+function useEffec(arg0: () => void) {
+  throw new Error('Function not implemented.');
 }

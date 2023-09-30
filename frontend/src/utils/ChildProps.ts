@@ -6,5 +6,8 @@ export interface Props {
   products?: any,
   sale?: any,
   removeItem?: any,
-  setSale?: any
+  setSale?: any,
+  display?: true|false,
+  message?: string,
+  item?: any
 }

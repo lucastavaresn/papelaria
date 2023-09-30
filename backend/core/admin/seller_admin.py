@@ -15,5 +15,3 @@ class SellerAdmin(admin.ModelAdmin):
 admin.site.register(Seller, SellerAdmin)
 
 
-admin.site.register(Sale)
-admin.site.register(SaleItem)
