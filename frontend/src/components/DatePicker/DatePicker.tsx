@@ -30,7 +30,6 @@ export const DataPickerComp = ()=> {
         start: dateFormat(start),
         end: dateFormat(end)
       }
-      console.log("Enviando data ==============: ", dates)
       dispatch(fetchCommission(dates))
       
     }

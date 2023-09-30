@@ -1,5 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiBaseUrl } from "../settings";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface CurrentSale {
     total: number

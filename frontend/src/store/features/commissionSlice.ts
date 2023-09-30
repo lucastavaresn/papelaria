@@ -21,7 +21,6 @@ export const fetchCommission = createAsyncThunk("commission/fetch", async (dates
         method: "GET"
     });
     const data=await response.json();
-    console.log("Response ========= ", data)
     return data;
 })
 
@@ -35,7 +34,6 @@ export const CommissionSlice=createSlice({
     },
     extraReducers:(builder)=> {
         builder.addCase(fetchCommission.fulfilled,(state, action)=>{
-            console.log("Actionsssss======: ", action.payload)
             state.commissions=action.payload;
         })
     },

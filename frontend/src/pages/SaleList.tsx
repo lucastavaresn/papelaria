@@ -2,10 +2,8 @@ import { Button, Grid } from "@mui/material";
 import ListBlock from "../components/ListBlock/ListBlock";
 import Typography from '@mui/material/Typography';
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useAppDispatch, useAppSelector } from "../store/store";
+import { useAppDispatch } from "../store/store";
 import { useEffect } from "react";
-import { fetchProduct } from "../store/features/productSlice";
 import { fetchSale } from "../store/features/saleSlice";
 
 

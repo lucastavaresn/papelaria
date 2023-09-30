@@ -3,7 +3,6 @@ import { apiBaseUrl } from "../settings";
 import { Product } from "./productSlice";
 import { Seller } from "./sellerSlice";
 import { Customer } from "./customerSlice";
-import { useAppDispatch } from "../store";
 
 export interface SaleItem {
     id: number;

@@ -1,8 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiBaseUrl } from "../settings";
-import { Product } from "./productSlice";
-import { Seller } from "./sellerSlice";
-import { Customer } from "./customerSlice";
 interface MiniProduct {
     product: number;
     quantity: number

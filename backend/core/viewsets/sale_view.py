@@ -22,7 +22,6 @@ class SaleViewSet(viewsets.ModelViewSet):
         invoice = request.data["invoice"]
         datetime = request.data["datetime"]
         products = request.data["products"]
-        print("Veio do front ===============: ", request.data)
         customer = Customer.objects.get(id=customer_id)
         seller = Seller.objects.get(id=seller_id)
 

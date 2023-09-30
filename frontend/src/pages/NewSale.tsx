@@ -1,5 +1,5 @@
 import {Autocomplete, Button, Grid, TextField, Typography } from "@mui/material";
-import { ChangeEvent, ChangeEventHandler, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent,  SyntheticEvent, useEffect, useState } from "react";
 import { ProductList } from "../components/ProductList/ProductList";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { fetchProduct } from "../store/features/productSlice";
@@ -9,7 +9,7 @@ import { fetchSeller } from "../store/features/sellerSlice";
 import { fetchCustomer } from "../store/features/customerSlice";
 import { addCurrentSale } from "../store/features/currentSaleSlice";
 import { v4 as uuidv4 } from 'uuid';
-import { Sale , addSaleSend, fetchSaleSend } from "../store/features/saleSenderSlice";
+import { fetchSaleSend } from "../store/features/saleSenderSlice";
 
 
 
@@ -112,7 +112,6 @@ export default function SaleCreate(){
       };
     
     const isOptionEqualToValue = (option:any, value:any) => {
-    // Compare as opções com base no campo 'id'
     return option.id === value.id;
     };
 
@@ -133,7 +132,6 @@ export default function SaleCreate(){
 
 
         }
-        console.log("Venda concluida ================: ", sale)
         dispatch(fetchSaleSend(sale))
 
     }
